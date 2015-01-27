@@ -3,3 +3,5 @@
 wav_player.c			# to play WAV audio files
 
 evtest.c			# to watch input events
+
+htoi.c				# hex string to integer
