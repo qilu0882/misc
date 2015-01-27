@@ -7,3 +7,5 @@ evtest.c			# to watch input events
 htoi.c				# hex string to integer
 
 rageagainstthecage.c		# android 1.x/2.x adb setuid() root exploit
+
+apue.3e/			# APUE 3rd Edition source code
