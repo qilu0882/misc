@@ -97,11 +97,28 @@ int set_parity(int fd,int databits,int stopbits,int parity)
 
 
 	/* raw mode */
+#if 0
 	options.c_lflag &= ~(ICANON|ECHO|ECHOE|ISIG);
 	options.c_oflag &= ~OPOST;		// Postprocess output (not set = raw output)
 
 	options.c_iflag &= ~(INLCR|IGNCR|ICRNL);
 	options.c_oflag &= ~(ONLCR|OCRNL);
+#else
+	/**
+	 * cfmakeraw() sets the terminal to something like the "raw" mode of the old Version 7 terminal driver: input is available character by  char‐
+	 * acter,  echoing  is  disabled, and all special processing of terminal input and output characters is disabled.  The terminal attributes are
+	 * set as follows:
+
+           termios_p->c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
+                           | INLCR | IGNCR | ICRNL | IXON);
+           termios_p->c_oflag &= ~OPOST;
+           termios_p->c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+           termios_p->c_cflag &= ~(CSIZE | PARENB);
+           termios_p->c_cflag |= CS8;
+	 *
+	 */
+	cfmakeraw(&options);
+#endif
 
 	/* flow control */
 	options.c_cflag &= ~CRTSCTS;		// No hardware flow control
@@ -326,6 +343,7 @@ int main(int argc, char **argv)
 			}
 
 			count += nread;
+			fflush(fp);
 		}
 
 	} else if (TX == dir) {
